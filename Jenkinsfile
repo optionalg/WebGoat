@@ -1,5 +1,9 @@
 pipeline {
   agent any
+  def mvnHome
+  env.JAVA_HOME="{tool'JDK8'}"
+  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
+
   stages {
     stage('Prepare') {
       steps {
@@ -8,9 +12,9 @@ pipeline {
     }
     stage('Build') {
       steps {
-        tool 'M3'
+        mvnHome = tool 'M3'
         isUnix()
-        sh '\'${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./pom.xml clean package -U'
+        sh "'${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./pom.xml clean package -U"
       }
     }
   }

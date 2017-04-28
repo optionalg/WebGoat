@@ -14,7 +14,7 @@ pipeline {
       steps {
         mvnHome = tool 'M3'
         isUnix()
-        sh "'${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./pom.xml clean package -U"
+        sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore -f ./pom.xml clean package -U"
       }
     }
   }

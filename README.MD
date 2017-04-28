@@ -67,13 +67,13 @@ Now let's start by compiling the project.
 ```Shell
 cd WebGoat
 git checkout develop
-mvn clean package
+mvn clean install
 ```
 
 Now we are ready to run the project. WebGoat 8.x is using Spring-Boot.
 
 ```Shell
-mvn -pl webgoat-container spring-boot:run
+mvn -pl webgoat-server spring-boot:run
 ```
 ... you should be running webgoat on localhost:8080/WebGoat momentarily
 
@@ -99,13 +99,12 @@ On x86 you can build a container with the following commands:
 
 ```Shell
 cd WebGoat/
-mvn package
-cd webgoat-container
-mvn package
+mvn install
+cd webgoat-server
 mvn docker:build
 docker tag webgoat/webgoat-8.0 webgoat/webgoat-8.0:8.0
 docker login
-docker push webgoat/webgoat-container
+docker push webgoat/webgoat-8.0
 ```
 
 ### Docker on ARM (Raspberry Pi)
@@ -125,13 +124,12 @@ When you have done this you can build the Docker container using the following c
  
 ```Shell
 cd WebGoat/
-mvn package
-cd webgoat-container
-mvn package
+mvn install
+cd webgoat-server
 mvn docker:build -Drpi=true
 docker tag webgoat/webgoat-8.0 webgoat/webgoat-8.0:8.0
 docker login
-docker push webgoat/webgoat-container
+docker push webgoat/webgoat-8.0
 ```
 
 With the following command you are able to run the Docker container on your local machine:

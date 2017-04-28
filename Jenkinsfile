@@ -4,14 +4,13 @@ pipeline {
     stage('Prepare') {
       steps {
         git(url: 'https://github.com/CMYanko/WebGoat.git', branch: 'develop')
-        tool 'M3'
-        tool 'JDK8'
       }
     }
     stage('Build') {
       steps {
+        tool 'M3'
         isUnix()
-        sh '"\'${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./pom.xml clean install -U"'
+        sh '\'${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./pom.xml clean package -U'
       }
     }
   }

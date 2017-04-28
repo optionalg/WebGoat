@@ -11,7 +11,7 @@ pipeline {
     stage('Build') {
       steps {
         isUnix()
-        sh '${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./webgoat/pom.xml clean install -U'
+        sh '"\'${mvnHome}/bin/mvn\' -Dmaven.test.failure.ignore -f ./webgoat/pom.xml clean install -U"'
       }
     }
   }

@@ -1,21 +1,20 @@
 package org.owasp.webgoat.plugin;
 
 import org.apache.commons.exec.OS;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AssignmentHints;
 import org.owasp.webgoat.assignments.AssignmentPath;
 import org.owasp.webgoat.assignments.AttackResult;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
-import java.io.StringReader;
+import static org.springframework.http.MediaType.ALL_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * ************************************************************************************************
@@ -46,47 +45,45 @@ import java.io.StringReader;
  * @version $Id: $Id
  * @since November 17, 2016
  */
-@AssignmentPath("XXE/simple")
+
+/**
+ * @author nbaars
+ * @since 4/8/17.
+ */
+@AssignmentPath("xxe/simple")
 @AssignmentHints({"xxe.hints.simple.xxe.1", "xxe.hints.simple.xxe.2", "xxe.hints.simple.xxe.3", "xxe.hints.simple.xxe.4"})
 public class SimpleXXE extends AssignmentEndpoint {
 
     private final static String[] DEFAULT_LINUX_DIRECTORIES = {"usr", "opt", "var"};
     private final static String[] DEFAULT_WINDOWS_DIRECTORIES = {"Windows", "Program Files (x86)", "Program Files"};
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Value("${webgoat.server.directory}")
+    private String webGoatHomeDirectory;
+    @Autowired
+    private Comments comments;
+
+    @RequestMapping(method = POST, consumes = ALL_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AttackResult createNewUser(@RequestBody String userInfo) throws Exception {
-        User user = parseXml(userInfo);
-        if (checkSolution(user)) {
-          return trackProgress(success()
-              .output("xxe.simple.output")
-              .outputArgs(user.getUsername()).build());
+    public AttackResult createNewComment(@RequestBody String commentStr) throws Exception {
+        String error = "";
+        try {
+            Comment comment = comments.parseXml(commentStr);
+            comments.addComment(comment, false);
+            if (checkSolution(comment)) {
+                return trackProgress(success().build());
+            }
+        } catch (Exception e) {
+            error = ExceptionUtils.getFullStackTrace(e);
         }
-        return trackProgress(failed().build());
+        return trackProgress(failed().output(error).build());
     }
 
-    public static User parseXml(String xml) throws Exception {
-        JAXBContext jc = JAXBContext.newInstance(User.class);
-
-        XMLInputFactory xif = XMLInputFactory.newFactory();
-        xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, true);
-        xif.setProperty(XMLInputFactory.IS_VALIDATING, false);
-
-        xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
-        XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xml));
-
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        return (User) unmarshaller.unmarshal(xsr);
-    }
-
-    public static boolean checkSolution(User userInfo) {
+    private boolean checkSolution(Comment comment) {
         String[] directoriesToCheck = OS.isFamilyUnix() ? DEFAULT_LINUX_DIRECTORIES : DEFAULT_WINDOWS_DIRECTORIES;
         boolean success = true;
         for (String directory : directoriesToCheck) {
-            success &= userInfo.getUsername().contains(directory);
+            success &= comment.getText().contains(directory);
         }
         return success;
     }
-
-
 }

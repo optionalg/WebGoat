@@ -13,17 +13,17 @@ pipeline {
                 ''' 
             }
         }  
-        stage('Build') { 
-             steps {
-                sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
-            }
-            post {
-                success {
-                    junit '**/target/surefire-reports/**/*.xml' 
-                }
+    stage('Build') { 
+        steps {
+            sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
+        }
+        post {
+            success {
+                junit '**/target/surefire-reports/**/*.xml' 
             }
         }
-        stage('IQ Scan - Build') {
+    }
+    stage('IQ Scan - Build') {
             steps{
                 nexusPolicyEvaluation failBuildOnNetworkError: false, iqApplication: 'webgoat8', iqStage: 'build', jobCredentialsId: ''
             }

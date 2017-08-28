@@ -25,7 +25,7 @@ pipeline {
     }
     stage('IQ Scan - Build') {
             steps{
-                nexusPolicyEvaluation failBuildOnNetworkError: false, iqApplication: 'webgoat8', iqStage: 'build', iqScanPatterns: [[scanPatter: '**/*.jar, **/*.war, **/*.ear, **/*.zip, **/*.tar.gz']], jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
+                nexusPolicyEvaluation failBuildOnNetworkError: false, iqApplication: 'webgoat8', iqStage: 'build', iqScanPatterns: [[scanPattern: '']], jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
             }
         }
     }

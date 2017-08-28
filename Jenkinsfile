@@ -13,7 +13,7 @@ pipeline {
                 ''' 
             }
             steps {
-                // Run the maven build
+                // Run the maven effective pom
                 if (isUnix()) {
                     sh "'${mvnHome}/bin/mvn' -B help:effective-pom"
                 } else {
@@ -23,7 +23,13 @@ pipeline {
         }  
         stage('Build') { 
              steps {
-                sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
+                sh 'mvn -B -Dmaven.test.failure.ignore=true clean install'
+                // Run the maven effective pom
+                if (isUnix()) {
+                    sh "'${mvnHome}/bin/mvn' -B -Dmaven.test.failure.ignore=true clean install"
+                } else {
+                    bat(/"${mvnHome}\bin\mvn" -B -Dmaven.test.failure.ignore=true clean install/)
+                } 
             }
         }
     }

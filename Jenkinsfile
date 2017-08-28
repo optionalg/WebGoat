@@ -5,22 +5,25 @@ pipeline {
       jdk 'jdk8'
     }
     stages {
-        stage ('Initialize') {
+        stage ('Pre-Build') {
             steps {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                 ''' 
             }
+            steps {
+                // Run the maven build
+                if (isUnix()) {
+                    sh 'mvn -B help:effective-pom'
+                } else {
+                    bat(/"${mvnHome}\bin\mvn" -B help:effective-pom/)
+                }
+            }
         }  
         stage('Build') { 
              steps {
                 sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
             }
         }
     }

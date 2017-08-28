@@ -15,7 +15,7 @@ pipeline {
             steps {
                 // Run the maven build
                 if (isUnix()) {
-                    sh 'mvn -B help:effective-pom'
+                    sh "'${mvnHome}/bin/mvn' -B help:effective-pom"
                 } else {
                     bat(/"${mvnHome}\bin\mvn" -B help:effective-pom/)
                 }

@@ -37,7 +37,7 @@ pipeline {
                 sh '''
                     cd webgoat-server
                     mvn -B docker:build
-                    docker tag webgoat/webgoat-8.0 webgoat/webgoat-8.0:8.0
+                    docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
                     docker push mycompany.com:18444/webgoat/webgoat-8.0
                 '''
             }

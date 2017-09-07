@@ -13,17 +13,17 @@ pipeline {
                 ''' 
             }
         }  
-    stage('Build') { 
-        steps {
-            sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
-        }
-        post {
-            always {
-                junit '**/target/surefire-reports/**/*.xml' 
+        stage('Build') { 
+            steps {
+              sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/**/*.xml' 
+                }
             }
         }
-    }
-    stage('IQ Scan - Build') {
+        stage('IQ Scan - Build') {
             steps{
                 nexusPolicyEvaluation failBuildOnNetworkError: false, 
                 iqApplication: 'webgoat8', 
@@ -32,13 +32,13 @@ pipeline {
                 jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
             }
         }
-    }
-    stage('Build Container'){
-        steps {
-            sh '''
-            cd webgoat server
-            mvn docker:build
-            '''
+        stage('Build Container') {
+            steps {
+                sh '''
+                    cd webgoat server
+                    mvn docker:build
+                '''
+            }
         }
     }
 }

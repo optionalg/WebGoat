@@ -15,7 +15,7 @@ pipeline {
         }  
         stage('Build') { 
             steps {
-              sh 'mvn -B -Dmaven.test.failure.ignore=true clean install' 
+              sh 'mvn -B -Dmaven.test.failure.ignore=true install' 
             }
             post {
                 always {
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 sh '''
                     cd webgoat-server
-                    mvn docker:build
+                    mvn -B docker:build
                 '''
             }
         }

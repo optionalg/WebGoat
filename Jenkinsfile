@@ -45,7 +45,7 @@ pipeline {
         }
         stage('Scan Container') {
             steps{
-                sh "docker save mycompany.com:18444/webgoat/wegoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
+                sh "docker save webgoat/wegoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
 
                 nexusPolicyEvaluation failBuildOnNetworkError: false, 
                 iqApplication: 'webgoat8', 

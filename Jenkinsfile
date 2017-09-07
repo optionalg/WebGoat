@@ -5,17 +5,13 @@ pipeline {
       jdk 'jdk8'
     }
     stages {
-        stage ('Pre-Build') {
+        stage ('Build') {
             steps {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
+                    mvn -B -Dmaven.test.failure.ignore=true install
                 ''' 
-            }
-        }  
-        stage('Build') { 
-            steps {
-              sh 'mvn -B -Dmaven.test.failure.ignore=true install' 
             }
             post {
                 always {

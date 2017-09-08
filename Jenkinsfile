@@ -41,7 +41,6 @@ pipeline {
                     suppressionFile: '', 
                     zipExtensions: ''
                  })
-                }
             }
 
         }

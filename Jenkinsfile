@@ -40,6 +40,12 @@ pipeline {
                     skipOnUpstreamChange: false, 
                     suppressionFile: '', 
                     zipExtensions: ''
+
+                    dependencyCheckPublisher canComputeNew: false, 
+                    defaultEncoding: '', 
+                    healthy: '', 
+                    pattern: '', 
+                    unHealthy: ''
                  })
             }
 

@@ -21,11 +21,27 @@ pipeline {
         }
         stage('IQ Scan - Build') {
             steps{
-                nexusPolicyEvaluation failBuildOnNetworkError: false, 
-                iqApplication: 'webgoat8', 
-                iqStage: 'build', 
-                iqScanPatterns: [[scanPattern: '']], 
-                jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
+                parallel(IQ: {
+                    nexusPolicyEvaluation failBuildOnNetworkError: false, 
+                    iqApplication: 'webgoat8', 
+                    iqStage: 'build', 
+                    iqScanPatterns: [[scanPattern: '']], 
+                    jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
+                 },
+                 OWASP: {
+                    dependencyCheckAnalyzer datadir: '', hintsFile: '', 
+                    includeCsvReports: false, 
+                    includeHtmlReports: false, 
+                    includeJsonReports: false, 
+                    isAutoupdateDisabled: false, 
+                    outdir: '', 
+                    scanpath: '', 
+                    skipOnScmChange: false, 
+                    skipOnUpstreamChange: false, 
+                    suppressionFile: '', 
+                    zipExtensions: ''
+                 })
+                }
             }
 
         }

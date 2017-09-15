@@ -72,6 +72,9 @@ pipeline {
                         docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
                     '''
                 }
+                failure {
+                    echo '...the IQ Scan FAILED'
+                }
             }   
         }
         stage('Publish Container') {

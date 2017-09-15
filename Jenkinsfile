@@ -47,7 +47,7 @@ pipeline {
                     pattern: '', 
                     unHealthy: ''
                  },
-                 Build Container:{
+                 'Build Container': {
                     sh '''
                         cd webgoat-server
                         mvn -B docker:build

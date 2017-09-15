@@ -46,19 +46,15 @@ pipeline {
                     healthy: '', 
                     pattern: '', 
                     unHealthy: ''
+                 },
+                 Build Container:{
+                    sh '''
+                        cd webgoat-server
+                        mvn -B docker:build
+                    '''
                  })
             }
 
-        }
-        stage('Build Container') {
-            steps {
-                sh '''
-                    cd webgoat-server
-                    mvn -B docker:build
-                    docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
-                    docker push mycompany.com:18444/webgoat/webgoat-8.0
-                '''
-            }
         }
         stage('Scan Container') {
             steps{
@@ -69,7 +65,21 @@ pipeline {
                 iqStage: 'release', 
                 iqScanPatterns: [[scanPattern: '*.tar']], 
                 jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
-            }    
+            } 
+            post {
+                success {
+                    sh '''
+                        docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
+                    '''
+                }
+            }   
+        }
+        stage('Publish Container') {
+            steps {
+                sh '''
+                    docker push mycompany.com:18444/webgoat/webgoat-8.0
+                '''
+            }
         }
     }
 }

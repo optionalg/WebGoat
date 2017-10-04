@@ -1,13 +1,14 @@
 pipeline { 
-    agent { label 'maven' }
-    
+    agent { node { label 'maven' } }
+       // define commands
+       def mvnCmd = "mvn -B -s configuration/cicd-settings.xml"
     stages {
         stage ('Build') {
             steps {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    mvn -B -DskipTest=true install
+                    ${mvnCmd} -DskipTest=true install
                 ''' 
             }
             post {

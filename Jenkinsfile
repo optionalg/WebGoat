@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        stage('Scan Components - Build Container') {
+        stage('IQ Scan - Build') {
             steps{
                 parallel(IQ: {
                     nexusPolicyEvaluation failBuildOnNetworkError: false, 
@@ -56,9 +56,8 @@ pipeline {
             }
 
         }
-        stage('Test Container') {
+        stage('Scan Container') {
             steps{
-              parallel('Scan Container': {
                 sh "docker save mycompany.com:18444/webgoat/webgoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
 
                 nexusPolicyEvaluation failBuildOnNetworkError: false, 
@@ -77,10 +76,7 @@ pipeline {
                     echo '...the IQ Scan FAILED'
                     error("...the IQ Scan FAILED")
                 }
-            },
-            "Functional Test":{
-                echo "deploy and run functional test"
-            })  
+            }   
         }
         stage('Publish Container') {
             steps {

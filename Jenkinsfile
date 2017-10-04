@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        stage('IQ Scan - Build') {
+        stage('Scan App - Build Container') {
             steps{
                 parallel(IQ: {
                     nexusPolicyEvaluation failBuildOnNetworkError: false, 

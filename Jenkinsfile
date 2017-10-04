@@ -10,7 +10,7 @@ pipeline {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    mvn -B -Dmaven.test.failure.ignore=true install
+                    mvn -B -DskipTest=true install
                 ''' 
             }
             post {

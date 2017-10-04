@@ -4,12 +4,10 @@ pipeline {
     stages {
         stage ('Build') {
             steps {
-                // define commands
-                def mvnCmd = "mvn -B -s configuration/cicd-settings.xml"
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    ${mvnCmd} -DskipTest=true install
+                    mvn -B -s configuration/cicd-settings.xml -DskipTest=true install
                 ''' 
             }
             post {

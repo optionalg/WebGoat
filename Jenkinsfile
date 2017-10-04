@@ -7,7 +7,7 @@ pipeline {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    mvn -B -s configuration/cicd-settings.xml -DskipTest=true install
+                    mvn -B -DskipTest=true install
                 ''' 
             }
             post {

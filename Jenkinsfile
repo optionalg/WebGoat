@@ -26,7 +26,7 @@ pipeline {
                     iqApplication: 'webgoat8', 
                     iqStage: 'build', 
                     iqScanPatterns: [[scanPattern: '']], 
-                    jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
+                    jobCredentialsId: ''
                  },
                  OWASP: {
                     dependencyCheckAnalyzer datadir: '', hintsFile: '', 

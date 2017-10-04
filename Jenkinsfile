@@ -74,6 +74,7 @@ pipeline {
                 }
                 failure {
                     echo '...the IQ Scan FAILED'
+                    error("...the IQ Scan FAILED")
                 }
             }   
         }

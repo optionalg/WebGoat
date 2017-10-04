@@ -64,7 +64,7 @@ pipeline {
                 iqApplication: 'webgoat8', 
                 iqStage: 'release', 
                 iqScanPatterns: [[scanPattern: '*.tar']], 
-                jobCredentialsId: '6f9e8ba7-b926-4ce1-b83f-f9c203c955e8'
+                jobCredentialsId: ''
             } 
             post {
                 success {

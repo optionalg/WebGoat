@@ -1,10 +1,11 @@
 pipeline { 
     agent { node { label 'maven' } }
-       // define commands
-       def mvnCmd = "mvn -B -s configuration/cicd-settings.xml"
+
     stages {
         stage ('Build') {
             steps {
+                // define commands
+                def mvnCmd = "mvn -B -s configuration/cicd-settings.xml"
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"

@@ -56,10 +56,9 @@ pipeline {
             }
 
         }
-        stages{
-            stage('Test Container') {
-              parallel{
-                  stage('Scan Container'): {
+        stage('Test Container') {
+            steps{
+              parallel('Scan Container': {
                 sh "docker save mycompany.com:18444/webgoat/webgoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
 
                 nexusPolicyEvaluation failBuildOnNetworkError: false, 
@@ -79,12 +78,10 @@ pipeline {
                     error("...the IQ Scan FAILED")
                 }
             },
-            stage("Functional Test"){
+            "Functional Test":{
                 echo "deploy and run functional test"
-            }  
-          }
+            })  
         }
-        
         stage('Publish Container') {
             steps {
                 sh '''

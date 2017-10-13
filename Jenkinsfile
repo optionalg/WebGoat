@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Scan App - Build Container') {
             steps{
-                parallel(IQ-BOM: {
+                parallel('IQ-BOM': {
                     nexusPolicyEvaluation failBuildOnNetworkError: false, 
                     iqApplication: 'webgoat8', 
                     iqStage: 'build', 

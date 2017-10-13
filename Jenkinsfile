@@ -22,30 +22,15 @@ pipeline {
         stage('Scan App - Build Container') {
             steps{
                 parallel('IQ-BOM': {
-                    nexusPolicyEvaluation failBuildOnNetworkError: false, 
+                    nexusPolicyEvaluation 
+                    failBuildOnNetworkError: false, 
                     iqApplication: 'webgoat8', 
                     iqStage: 'build', 
                     iqScanPatterns: [[scanPattern: '']], 
                     jobCredentialsId: ''
                  },
                  'Static Analysis': {
-                    dependencyCheckAnalyzer datadir: '', hintsFile: '', 
-                    includeCsvReports: false, 
-                    includeHtmlReports: false, 
-                    includeJsonReports: false, 
-                    isAutoupdateDisabled: false, 
-                    outdir: '', 
-                    scanpath: '', 
-                    skipOnScmChange: false, 
-                    skipOnUpstreamChange: false, 
-                    suppressionFile: '', 
-                    zipExtensions: ''
-
-                    dependencyCheckPublisher canComputeNew: false, 
-                    defaultEncoding: '', 
-                    healthy: '', 
-                    pattern: '', 
-                    unHealthy: ''
+                    echo '...run SonarQube or other SAST tools here'
                  },
                  'Build Container': {
                     sh '''
@@ -56,11 +41,26 @@ pipeline {
             }
 
         }
+        stage('Test Container') {
+            steps{
+                echo '...run container and test it'
+            } 
+            post {
+                success {
+                    echo '...the Test Scan Passed!'
+                }
+                failure {
+                    echo '...the Test  FAILED'
+                    error("...the Container Test FAILED")
+                }
+            }   
+        }
         stage('Scan Container') {
             steps{
                 sh "docker save mycompany.com:18444/webgoat/webgoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
 
-                nexusPolicyEvaluation failBuildOnNetworkError: false, 
+                nexusPolicyEvaluation 
+                failBuildOnNetworkError: false, 
                 iqApplication: 'webgoat8', 
                 iqStage: 'release', 
                 iqScanPatterns: [[scanPattern: '*.tar']], 
@@ -68,19 +68,21 @@ pipeline {
             } 
             post {
                 success {
-                    sh '''
-                        docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
-                    '''
+                    echo '...the IQ Scan PASSED :D'
                 }
                 failure {
-                    echo '...the IQ Scan FAILED'
+                    echo '...the IQ Scan FAILED :('
                     error("...the IQ Scan FAILED")
                 }
             }   
         }
         stage('Publish Container') {
+            when {
+                branch 'master'
+            }
             steps {
                 sh '''
+                    docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
                     docker push mycompany.com:18444/webgoat/webgoat-8.0
                 '''
             }

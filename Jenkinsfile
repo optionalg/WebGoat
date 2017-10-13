@@ -22,8 +22,7 @@ pipeline {
         stage('Scan App - Build Container') {
             steps{
                 parallel('IQ-BOM': {
-                    nexusPolicyEvaluation 
-                    failBuildOnNetworkError: false, 
+                    nexusPolicyEvaluation failBuildOnNetworkError: false, 
                     iqApplication: 'webgoat8', 
                     iqStage: 'build', 
                     iqScanPatterns: [[scanPattern: '']], 
@@ -59,8 +58,7 @@ pipeline {
             steps{
                 sh "docker save mycompany.com:18444/webgoat/webgoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
 
-                nexusPolicyEvaluation 
-                failBuildOnNetworkError: false, 
+                nexusPolicyEvaluation failBuildOnNetworkError: false, 
                 iqApplication: 'webgoat8', 
                 iqStage: 'release', 
                 iqScanPatterns: [[scanPattern: '*.tar']], 

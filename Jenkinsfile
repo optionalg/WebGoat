@@ -21,14 +21,14 @@ pipeline {
         }
         stage('Scan App - Build Container') {
             steps{
-                parallel(IQ: {
+                parallel(IQ-BOM: {
                     nexusPolicyEvaluation failBuildOnNetworkError: false, 
                     iqApplication: 'webgoat8', 
                     iqStage: 'build', 
                     iqScanPatterns: [[scanPattern: '']], 
                     jobCredentialsId: ''
                  },
-                 OWASP: {
+                 'Static Analysis': {
                     dependencyCheckAnalyzer datadir: '', hintsFile: '', 
                     includeCsvReports: false, 
                     includeHtmlReports: false, 

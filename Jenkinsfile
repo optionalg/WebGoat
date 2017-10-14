@@ -1,6 +1,8 @@
 pipeline { 
-    agent { node { label 'maven' } }
-
+    agent { label 'maven'  }
+    tools {
+        maven 'M3'
+    }
     stages {
         stage ('Build') {
             steps {

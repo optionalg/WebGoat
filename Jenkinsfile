@@ -1,8 +1,5 @@
 pipeline { 
-    agent { label 'maven'  }
-    tools {
-        maven 'M3'
-    }
+    agent {  docker 'maven:3-alpine'   }
     stages {
         stage ('Build') {
             steps {

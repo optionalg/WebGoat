@@ -56,7 +56,7 @@ pipeline {
         }
         stage('Scan Container') {
             steps{
-                sh "docker save mycompany.com:18444/webgoat/webgoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
+                sh "docker save webgoat/webgoat-8.0 -o ${env.WORKSPACE}/webgoat.tar"
 
                 nexusPolicyEvaluation failBuildOnNetworkError: false, 
                 iqApplication: 'webgoat8', 
@@ -80,8 +80,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker tag webgoat/webgoat-8.0 mycompany.com:18444/webgoat/webgoat-8.0:8.0
-                    docker push mycompany.com:18444/webgoat/webgoat-8.0
+                    docker tag webgoat/webgoat-8.0 mycompany.com:5000/webgoat/webgoat-8.0:8.0
+                    docker push mycompany.com:5000/webgoat/webgoat-8.0
                 '''
             }
         }

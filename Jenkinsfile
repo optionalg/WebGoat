@@ -66,10 +66,10 @@ pipeline {
             } 
             post {
                 success {
-                    echo '...the IQ Scan PASSED :D'
+                    postGitHub commitId, 'failure', 'build', 'IQ Scan PASSED'
                 }
                 failure {
-                    echo '...the IQ Scan FAILED :('
+                    postGitHub commitId, 'failure', 'build', 'IQ Scan FAILED'
                     error("...the IQ Scan FAILED")
                 }
             }   

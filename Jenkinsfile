@@ -17,6 +17,9 @@ pipeline {
                 always {
                     junit '**/target/surefire-reports/**/*.xml' 
                 }
+                failure {
+                    postGitHub commitId, 'success', 'build', 'Build FAILED'
+                }       
             }
         }
         stage('Scan App - Build Container') {

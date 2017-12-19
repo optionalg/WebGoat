@@ -16,13 +16,7 @@ pipeline {
             post {
                 always {
                     junit '**/target/surefire-reports/**/*.xml' 
-                }
-                failure {
-                    postGitHub commitId, 'success', 'build', 'Build FAILED'
-                }
-                success {
-                    postGitHub commitId, 'success', 'build', 'Build SUCCEEDED'
-                }       
+                }      
             }
         }
         stage('Scan App - Build Container') {
@@ -72,10 +66,10 @@ pipeline {
             } 
             post {
                 success {
-                    postGitHub commitId, 'failure', 'build', 'IQ Scan PASSED'
+                    echo '...the IQ Scan PASSED'
                 }
                 failure {
-                    postGitHub commitId, 'failure', 'build', 'IQ Scan FAILED'
+                    echo '...the IQ Scan FAILED'
                     error("...the IQ Scan FAILED")
                 }
             }   

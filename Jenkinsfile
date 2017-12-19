@@ -30,6 +30,9 @@ pipeline {
                 }
                 failure {
                     postGitHub commitId, 'success', 'build', 'Build FAILED'
+                }
+                success {
+                    postGitHub commitId, 'success', 'build', 'Build SUCCEEDED'
                 }       
             }
         }
